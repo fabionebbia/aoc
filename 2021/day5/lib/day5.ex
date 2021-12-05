@@ -44,15 +44,17 @@ defmodule Day5 do
   defp solve(input, filter) do
     input
     |> parse_input()
-    |> Enum.filter(&filter.(&1))
+    |> Enum.filter(filter)
     |> Enum.reduce([], &gen_points/2)
     |> Enum.frequencies()
     |> Enum.count(&(elem(&1, 1) >= 2))
   end
 
-  defp gen_points({same, same}, acc), do: [same | acc]
+  # TIL: Enum.zip(x0..x1, y0..y1) would produce the same points
+  #      (in different order, but the order doesn't matter here)
+  def gen_points({same, same}, acc), do: [same | acc]
 
-  defp gen_points({{curr_x, curr_y} = current, {target_x, target_y} = target}, acc) do
+  def gen_points({{curr_x, curr_y} = current, {target_x, target_y} = target}, acc) do
     next_x = curr_x + step(target_x - curr_x)
     next_y = curr_y + step(target_y - curr_y)
 
