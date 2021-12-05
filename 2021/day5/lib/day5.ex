@@ -52,9 +52,9 @@ defmodule Day5 do
 
   # TIL: Enum.zip(x0..x1, y0..y1) would produce the same points
   #      (in different order, but the order doesn't matter here)
-  def gen_points({same, same}, acc), do: [same | acc]
+  defp gen_points({same, same}, acc), do: [same | acc]
 
-  def gen_points({{curr_x, curr_y} = current, {target_x, target_y} = target}, acc) do
+  defp gen_points({{curr_x, curr_y} = current, {target_x, target_y} = target}, acc) do
     next_x = curr_x + step(target_x - curr_x)
     next_y = curr_y + step(target_y - curr_y)
 
