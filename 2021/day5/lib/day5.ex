@@ -51,7 +51,7 @@ defmodule Day5 do
   end
 
   # TIL: Enum.zip(curr_x..target_x, curr_y..target_y) would produce
-  #      the same points (in reverse order, but doesn't matter)
+  #      the same points (in reverse order, but doesn't matter here)
   defp gen_points({same, same}, acc), do: [same | acc]
 
   defp gen_points({{curr_x, curr_y} = current, {target_x, target_y} = target}, acc) do
