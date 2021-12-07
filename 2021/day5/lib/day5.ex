@@ -1,5 +1,5 @@
 defmodule Day5 do
-  @doc """
+@doc """
 
       iex> Day5.part1(\"""
       ...>0,9 -> 5,9
@@ -38,7 +38,7 @@ defmodule Day5 do
 
   """
   def part2(input) when is_binary(input) do
-    solve(input, &(&1))
+    solve(input, &Function.identity/1)
   end
 
   defp solve(input, filter) do
@@ -50,8 +50,8 @@ defmodule Day5 do
     |> Enum.count(&(elem(&1, 1) >= 2))
   end
 
-  # TIL: Enum.zip(x0..x1, y0..y1) would produce the same points
-  #      (in different order, but the order doesn't matter here)
+  # TIL: Enum.zip(curr_x..target_x, curr_y..target_y) would produce
+  #      the same points (in reverse order, but doesn't matter)
   defp gen_points({same, same}, acc), do: [same | acc]
 
   defp gen_points({{curr_x, curr_y} = current, {target_x, target_y} = target}, acc) do
