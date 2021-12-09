@@ -1,6 +1,5 @@
 defmodule Day4 do
   @doc """
-
       iex> Day4.part1(\"""
       ...>7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
       ...>
@@ -23,7 +22,6 @@ defmodule Day4 do
       ...>2  0 12  3  7
       ...>\""")
       4512
-
   """
   def part1(input) when is_binary(input) do
     {random_numbers, boards} = parse_input(input)
@@ -31,7 +29,6 @@ defmodule Day4 do
   end
 
   @doc """
-
       iex> Day4.part2(\"""
       ...>7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
       ...>
@@ -54,7 +51,6 @@ defmodule Day4 do
       ...>2  0 12  3  7
       ...>\""")
       1924
-
   """
   def part2(input) when is_binary(input) do
     {random_numbers, boards} = parse_input(input)

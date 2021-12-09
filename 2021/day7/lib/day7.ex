@@ -12,6 +12,8 @@ defmodule Day7 do
       168
   """
   def part2(input) do
+    # TIL: Using &div(&1 * (&1 + 1), 2) would be more efficient
+    #      and less brute-force-y than &Enum.sum(1..&1)
     solve(input, &Enum.sum(1..&1))
   end
 

@@ -1,6 +1,5 @@
 defmodule Day5 do
-@doc """
-
+  @doc """
       iex> Day5.part1(\"""
       ...>0,9 -> 5,9
       ...>8,0 -> 0,8
@@ -14,14 +13,12 @@ defmodule Day5 do
       ...>5,5 -> 8,2
       ...>\""")
       5
-
   """
   def part1(input) when is_binary(input) do
     solve(input, fn {{x0, y0}, {x1, y1}} -> x0 === x1 or y0 === y1 end)
   end
 
   @doc """
-
       iex> Day5.part2(\"""
       ...>0,9 -> 5,9
       ...>8,0 -> 0,8
@@ -35,7 +32,6 @@ defmodule Day5 do
       ...>5,5 -> 8,2
       ...>\""")
       12
-
   """
   def part2(input) when is_binary(input) do
     solve(input, &Function.identity/1)
@@ -52,6 +48,14 @@ defmodule Day5 do
 
   # TIL: Enum.zip(curr_x..target_x, curr_y..target_y) would produce
   #      the same points (in reverse order, but doesn't matter here)
+  #
+  # Update: No! Enum.zip would work for diagonals only e.g.
+  #         case pair do
+  #           {{x, y1}, {x, y2}} -> Enum.map(y1..y2, fn y -> {x, y} end)
+  #           {{x1, y}, {x2, y}} -> Enum.map(x1..x2, fn x -> {x, y} end)
+  #           {{x1, y1}, {x2, y2}} -> Enum.zip(x1..x2, y1..y2)
+  #         end
+
   defp gen_points({same, same}, acc), do: [same | acc]
 
   defp gen_points({{curr_x, curr_y} = current, {target_x, target_y} = target}, acc) do

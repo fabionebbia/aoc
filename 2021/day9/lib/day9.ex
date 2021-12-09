@@ -10,69 +10,58 @@ defmodule Day9 do
       15
   """
   def part1(input) do
-    {grid, rows, cols} = parse_input(input)
-
-    grid
-    |> get_low_points(rows, cols)
+    input
+    |> Grid.new()
+    |> get_low_points()
     |> Enum.map(&(elem(&1, 1) + 1))
     |> Enum.sum()
   end
 
+  @doc """
+      iex>Day9.part2(\"""
+      ...>2199943210
+      ...>3987894921
+      ...>9856789892
+      ...>8767896789
+      ...>9899965678
+      ...>\""")
+      1134
+  """
   def part2(input) do
-    {grid, rows, cols} = parse_input(input)
+    grid = Grid.new(input)
+
+    [lb0, lb1, lb2 | _] =
+      grid
+      |> get_low_points()
+      |> Enum.map(fn low_point -> find_basin(grid, low_point, []) end)
+      |> Enum.map(&length/1)
+      |> Enum.sort(:desc)
+
+    lb0 * lb1 * lb2
   end
 
-  defp get_low_points(grid, rows, cols) do
-    for row <- 0..rows,
-        col <- 0..cols do
-      coord = {row, col}
-      {coord, get_value(grid, coord)}
-    end
-    |> Enum.map(fn {coord, value} ->
-      adjacent_values =
-        coord
-        |> get_adjacent(rows, cols)
-        |> Enum.map(fn adjacent -> {adjacent, get_value(grid, adjacent)} end)
+  defp find_basin(_grid, [], acc) do
+    Enum.uniq(acc)
+  end
 
-      {coord, value, adjacent_values}
+  defp find_basin(grid, points, acc) when is_list(points) do
+    Enum.reduce(points, acc, fn point, acc -> find_basin(grid, point, acc) end)
+  end
+
+  defp find_basin(grid, {{row, col}, value} = low_point, acc) do
+    new_points =
+      grid
+      |> Grid.get_adjacents(row, col)
+      |> Enum.filter(fn {_, adj_value} -> value < adj_value && adj_value < 9 end)
+
+    find_basin(grid, new_points, [low_point | new_points] ++ acc)
+  end
+
+  defp get_low_points(grid) do
+    Enum.filter(grid, fn {{row, col}, value} ->
+      grid
+      |> Grid.get_adjacents(row, col)
+      |> Enum.all?(fn {_, adj_value} -> value < adj_value end)
     end)
-    |> Enum.filter(fn {_, value, adjacents} ->
-      Enum.all?(adjacents, fn {_, adj_value} -> value < adj_value end)
-    end)
-    |> Enum.map(fn {coord, value, _} -> {coord, value} end)
-  end
-
-  defp get_value(grid, {row, col}) do
-    grid |> elem(row) |> elem(col)
-  end
-
-  defp get_adjacent({row, col}, rows, cols) do
-    [
-      {row - 1, col},
-      {row, col + 1},
-      {row + 1, col},
-      {row, col - 1}
-    ]
-    |> Enum.filter(fn {row, col} ->
-      row >= 0 and row <= rows and (col >= 0 and col <= cols)
-    end)
-  end
-
-  defp parse_input(input) when is_binary(input) do
-    grid =
-      input
-      |> String.split("\n", trim: true)
-      |> Enum.map(fn line ->
-        line
-        |> String.split("", trim: true)
-        |> Enum.map(&String.to_integer/1)
-        |> List.to_tuple()
-      end)
-      |> List.to_tuple()
-
-    rows = tuple_size(grid) - 1
-    cols = tuple_size(elem(grid, 0)) - 1
-
-    {grid, rows, cols}
   end
 end

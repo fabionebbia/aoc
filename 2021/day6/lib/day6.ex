@@ -1,9 +1,7 @@
 defmodule Day6 do
   @doc """
-
       iex>Day6.solve("3,4,3,1,2", 80)
       26
-
   """
   def solve(input, days) do
     fish = parse_input(input)
