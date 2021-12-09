@@ -40,21 +40,21 @@ defmodule Day9 do
     lb0 * lb1 * lb2
   end
 
-  defp find_basin(_grid, [], acc) do
-    Enum.uniq(acc)
-  end
-
   defp find_basin(grid, points, acc) when is_list(points) do
     Enum.reduce(points, acc, fn point, acc -> find_basin(grid, point, acc) end)
   end
 
-  defp find_basin(grid, {{row, col}, value} = low_point, acc) do
+  defp find_basin(grid, {{row, col}, value} = point, acc) do
     new_points =
       grid
       |> Grid.get_adjacents(row, col)
-      |> Enum.filter(fn {_, adj_value} -> value < adj_value && adj_value < 9 end)
+      |> Enum.filter(fn {_, adj_value} -> value < adj_value and adj_value < 9 end)
 
-    find_basin(grid, new_points, [low_point | new_points] ++ acc)
+    find_basin(grid, new_points, [point | new_points] ++ acc)
+  end
+
+  defp find_basin(_grid, [], acc) do
+    Enum.uniq(acc)
   end
 
   defp get_low_points(grid) do
