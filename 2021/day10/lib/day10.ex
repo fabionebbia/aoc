@@ -72,8 +72,6 @@ defmodule Day10 do
       end)
       |> Enum.sort()
 
-    IO.inspect(points)
-
     Enum.at(points, div(length(points), 2))
   end
 
