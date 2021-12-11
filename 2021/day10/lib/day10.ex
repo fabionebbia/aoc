@@ -1,9 +1,4 @@
 defmodule Day10 do
-  defguardp is_opening(paren) when paren in [?(, ?[, ?{, ?<]
-
-  defguardp matches(opening, closing) when opening == ?( and closing == ?)
-  defguardp matches(opening, closing) when opening in [?[, ?{, ?<] and closing == opening + 2
-
   @illegal_points %{
     ?) => 3,
     ?] => 57,
@@ -75,16 +70,12 @@ defmodule Day10 do
     Enum.at(points, div(length(points), 2))
   end
 
-  defp visit([opening, closing | input], expected) when matches(opening, closing) do
-    visit(input, expected)
+  defp visit([opening | input], expected) when opening in [?(, ?[, ?{, ?<] do
+    visit(input, [pair(opening) | expected])
   end
 
   defp visit([closing | input], [closing | expected]) do
     visit(input, expected)
-  end
-
-  defp visit([opening | input], expected) when is_opening(opening) do
-    visit(input, [pair(opening) | expected])
   end
 
   defp visit([illegal | _], _), do: {:illegal, illegal}
