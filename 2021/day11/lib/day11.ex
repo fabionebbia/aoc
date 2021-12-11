@@ -59,17 +59,14 @@ defmodule Day11 do
   end
 
   defp step(octopi) do
-    # Increments the energy level of each octopus by 1
+    # Increment the energy level of each octopus by 1
     octopi = for {coord, energy} <- octopi, into: %{}, do: {coord, energy + 1}
 
     # Flash octopi
     {octopi, flashed} = flash(octopi)
 
-    # Reset the energy level of each octopus that flashed during this step to 0
-    octopi =
-      for coord <- flashed, into: octopi do
-        {coord, 0}
-      end
+    # Reset the energy level of each octopus that flashed during this step
+    octopi = for coord <- flashed, into: octopi, do: {coord, 0}
 
     {length(flashed), octopi}
   end
