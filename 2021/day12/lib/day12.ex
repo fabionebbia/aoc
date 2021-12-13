@@ -62,9 +62,7 @@ defmodule Day12 do
   end
 
   defp visit_part_1(graph) do
-    graph
-    |> visit_part_1("start", [], [])
-    |> Enum.reverse()
+    visit_part_1(graph, "start", [], [])
   end
 
   defp visit_part_1(_, "end", path, acc), do: [Enum.reverse(["end" | path]) | acc]
