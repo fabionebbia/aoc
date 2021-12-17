@@ -1,0 +1,2 @@
+Needs refactoring.
+Took ~110 minutes to complete on my machine.
