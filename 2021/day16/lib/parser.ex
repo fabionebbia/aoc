@@ -4,19 +4,19 @@ defmodule Day16.Parser do
     1 => :product,
     2 => :min,
     3 => :max,
-    # 4 is a literal
+    # 4 => literal
     5 => :greater_than,
     6 => :less_than,
     7 => :equal_to
   }
 
-  def parse(input, discard_rest \\ true) do
-    {parsed, rest} =
+  def parse(input) do
+    {parsed, _rest} =
       input
       |> hex_to_bin()
       |> do_parse()
 
-    if discard_rest, do: parsed, else: {parsed, rest}
+    parsed
   end
 
   # Literal.
@@ -77,21 +77,9 @@ defmodule Day16.Parser do
     {packets, size + 12, rest}
   end
 
-  defp hex_to_bin(<<?0, rest::binary>>), do: <<(<<0::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?1, rest::binary>>), do: <<(<<1::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?2, rest::binary>>), do: <<(<<2::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?3, rest::binary>>), do: <<(<<3::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?4, rest::binary>>), do: <<(<<4::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?5, rest::binary>>), do: <<(<<5::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?6, rest::binary>>), do: <<(<<6::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?7, rest::binary>>), do: <<(<<7::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?8, rest::binary>>), do: <<(<<8::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?9, rest::binary>>), do: <<(<<9::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?A, rest::binary>>), do: <<(<<10::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?B, rest::binary>>), do: <<(<<11::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?C, rest::binary>>), do: <<(<<12::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?D, rest::binary>>), do: <<(<<13::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?E, rest::binary>>), do: <<(<<14::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<?F, rest::binary>>), do: <<(<<15::size(4), hex_to_bin(rest)::bitstring>>)>>
-  defp hex_to_bin(<<>>), do: <<>>
+  defp hex_to_bin(input) do
+    bits = String.to_integer(input, 16)
+    size = byte_size(input)
+    <<bits::size(size)-unit(4)>>
+  end
 end
